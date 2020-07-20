@@ -1,5 +1,5 @@
 # Create your Phrase class logic here.
-#from phrasehunter.character import Character
+from phrasehunter.character import Character
 
 
 class Phrase(list):
@@ -8,6 +8,10 @@ class Phrase(list):
 
         for char in self.phrase:
             self.append(Character(char))
+
+        for char in self:
+            if char.original == " ":
+                char.was_guessed = True
 
     def eval_guess(self, guess):
         for char in self:
@@ -18,3 +22,11 @@ class Phrase(list):
         for char in self:
             display_string += char.display_char()
         print(display_string)
+
+    @property
+    def num_correct(self):
+        correct = 0
+        for char in self:
+            if char.was_guessed == True:
+                correct += 1
+        return correct
