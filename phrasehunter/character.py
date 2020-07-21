@@ -11,6 +11,6 @@ class Character():
 
     def display_char(self):
         if self.was_guessed == True:
-            return self.original
+            return self.original + " "
         else:
-            return "_"
+            return "_ "

@@ -22,7 +22,7 @@ class Game():
             already_guessed = []
             lives = 5
 
-            while lives > 0:
+            while True:
                 current_score = active_phrase.num_correct
                 print(f"\n* you have {lives} out of 5 lives left *\n")
                 active_phrase.print_phrase()
@@ -44,6 +44,9 @@ class Game():
                 elif active_phrase.num_correct > current_score:
                     if active_phrase.num_correct == len(active_phrase):
                         os.system('clear')
+                        print("Nice!")
+                        print(f"\n* you have {lives} out of 5 lives left *\n")
+                        active_phrase.print_phrase()
                         print("\nYou Win!\n")
                         print(f"The phrase was ' {random_phrase} '\n")
                         break
@@ -84,14 +87,3 @@ class Game():
                 guess = input("Not a valid guess, try again:  ")
                 continue
         return guess
-
-        # check to see if already guessed
-
-        # if not:
-        # append to already guessed
-        # call eval method on phrase passing guess
-
-        # if guessed:
-        # print "You already guessed that letter, try again!"
-
-        # raise ValueError
