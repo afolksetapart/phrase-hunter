@@ -23,7 +23,7 @@ class Game():
     def new_game(self):
         self.phrases.remove(self.random_phrase)
 
-        while self.lives:
+        while True:
             self.turn()
             self.update_score()
 
