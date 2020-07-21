@@ -30,7 +30,7 @@ class Game():
             if not self.lives:
                 print(f"\n* you have {self.lives} out of 5 lives left *\n")
                 self.active_phrase.print_phrase()
-                print("\nBetter luck next time!\n")
+                print("\nGame Over! Better luck next time!\n")
                 break
 
             elif self.current_score == len(self.active_phrase):
