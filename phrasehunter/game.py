@@ -9,76 +9,52 @@ from phrasehunter.phrase import Phrase
 class Game():
     def __init__(self, phrases):
         self.phrases = phrases
+        self.random_phrase = random.choice(self.phrases)
+        self.active_phrase = Phrase(self.random_phrase)
+        self.current_score = self.active_phrase.num_correct
+        self.already_guessed = []
+        self.lives = 5
 
     def start_game(self):
         os.system('clear')
         print("\n?¿?¿ Welcome To Phrase Hunter ¿?¿?\n")
+        self.new_game()
 
-        while True:
-            random_phrase = random.choice(self.phrases)
-            active_phrase = Phrase(random_phrase)
-            self.phrases.remove(random_phrase)
-            already_guessed = []
-            lives = 5
+    def new_game(self):
+        self.phrases.remove(self.random_phrase)
 
-            while True:
-                current_score = active_phrase.num_correct
-                print(f"\n* you have {lives} out of 5 lives left *\n")
-                active_phrase.print_phrase()
+        while self.lives:
+            self.turn()
+            self.update_score()
 
-                guess = input("\nGuess a letter:  ")
-                guess = guess.lower()
-                guess = self.valid_guess(guess, already_guessed)
+            if not self.lives:
+                print(f"\n* you have {self.lives} out of 5 lives left *\n")
+                self.active_phrase.print_phrase()
+                print("\nBetter luck next time!\n")
+                break
 
-                active_phrase.eval_guess(guess)
+            elif self.current_score == len(self.active_phrase):
+                print(f"\n* you have {self.lives} out of 5 lives left *\n")
+                self.active_phrase.print_phrase()
+                print("\nYou Win!\n")
+                print(f"The phrase was ' {self.random_phrase} '\n")
+                break
 
-                if active_phrase.num_correct == current_score:
-                    lives -= 1
-                    if lives > 0:
-                        os.system('clear')
-                        continue
-                    elif lives == 0:
-                        print("\nBetter luck next time!\n")
-                        break
+            else:
+                continue
 
-                elif active_phrase.num_correct > current_score:
-                    if active_phrase.num_correct == len(active_phrase):
-                        os.system('clear')
-                        print("Nice!")
-                        print(f"\n* you have {lives} out of 5 lives left *\n")
-                        active_phrase.print_phrase()
-                        print("\nYou Win!\n")
-                        print(f"The phrase was ' {random_phrase} '\n")
-                        break
-                    else:
-                        os.system('clear')
-                        print("Nice!")
-                        continue
+        if self.phrases:
+            self.play_again()
+        else:
+            print("\nThat's all the phrases we have! Thanks for playing!\n")
+            input("Press ENTER to exit...")
+            sys.exit()
 
-            if len(self.phrases) == 0:
-                print("\nThat's all the phrases we have! Thanks for playing!\n")
-                input("Press ENTER to exit...")
-                sys.exit()
-
-            while True:
-                play_again = input("Would you like to play again? [y/n]  ")
-                if play_again.isalpha():
-                    play_again.lower()
-                    if play_again == "n":
-                        sys.exit()
-                    elif play_again == "y":
-                        break
-                else:
-                    continue
-            os.system('clear')
-            continue
-
-    @staticmethod
-    def valid_guess(guess, guess_list):
+    def valid_guess(self, guess):
         while True:
             if len(guess) == 1 and guess.isalpha():
-                if guess not in guess_list:
-                    guess_list.extend((guess, guess.upper()))
+                if guess not in self.already_guessed:
+                    self.already_guessed.extend((guess, guess.upper()))
                     break
                 else:
                     guess = input(
@@ -88,3 +64,41 @@ class Game():
                 guess = input("Not a valid guess, try again:  ")
                 continue
         return guess
+
+    def turn(self):
+        print(f"\n* you have {self.lives} out of 5 lives left *\n")
+        self.active_phrase.print_phrase()
+        guess = input("\nGuess a letter:  ")
+
+        guess = self.valid_guess(guess.lower())
+        self.active_phrase.eval_guess(guess)
+
+    def update_score(self):
+        if self.active_phrase.num_correct == self.current_score:
+            self.lives -= 1
+            os.system('clear')
+        elif self.active_phrase.num_correct > self.current_score:
+            self.current_score = self.active_phrase.num_correct
+            os.system('clear')
+            print("Nice!")
+
+    def play_again(self):
+        while True:
+            play_again = input("Would you like to play again? [y/n]  ")
+            if play_again.isalpha():
+                play_again.lower()
+                if play_again == "n":
+                    sys.exit()
+                elif play_again == "y":
+                    os.system('clear')
+                    self.reset_game()
+                    self.new_game()
+            else:
+                continue
+
+    def reset_game(self):
+        self.random_phrase = random.choice(self.phrases)
+        self.active_phrase = Phrase(self.random_phrase)
+        self.current_score = self.active_phrase.num_correct
+        self.already_guessed = []
+        self.lives = 5
