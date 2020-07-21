@@ -1,4 +1,3 @@
-# Create your Character class logic in here.
 
 class Character():
     def __init__(self, original, was_guessed=False):
