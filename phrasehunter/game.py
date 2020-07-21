@@ -8,9 +8,8 @@ from phrasehunter.phrase import Phrase
 
 class Game():
     def __init__(self, phrases):
-        self.phrases = phrases
-        self.random_phrase = random.choice(self.phrases)
-        self.active_phrase = Phrase(self.random_phrase)
+        self.phrases = [Phrase(phrase) for phrase in phrases]
+        self.active_phrase = random.choice(self.phrases)
         self.current_score = self.active_phrase.num_correct
         self.already_guessed = []
         self.lives = 5
@@ -21,7 +20,7 @@ class Game():
         self.new_game()
 
     def new_game(self):
-        self.phrases.remove(self.random_phrase)
+        self.phrases.remove(self.active_phrase)
 
         while True:
             self.turn()
@@ -37,7 +36,7 @@ class Game():
                 print(f"\n* you have {self.lives} out of 5 lives left *\n")
                 self.active_phrase.print_phrase()
                 print("\nYou Win!\n")
-                print(f"The phrase was ' {self.random_phrase} '\n")
+                print(f"The phrase was ' {self.active_phrase.phrase} '\n")
                 break
 
             else:
@@ -97,8 +96,7 @@ class Game():
                 continue
 
     def reset_game(self):
-        self.random_phrase = random.choice(self.phrases)
-        self.active_phrase = Phrase(self.random_phrase)
+        self.active_phrase = random.choice(self.phrases)
         self.current_score = self.active_phrase.num_correct
         self.already_guessed = []
         self.lives = 5
