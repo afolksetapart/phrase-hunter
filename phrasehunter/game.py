@@ -27,6 +27,7 @@ class Game():
                 active_phrase.print_phrase()
 
                 guess = input("\nGuess a letter:  ")
+                guess = guess.lower()
                 guess = self.valid_guess(guess, already_guessed)
 
                 active_phrase.eval_guess(guess)
@@ -53,6 +54,7 @@ class Game():
                         os.system('clear')
                         print("Nice!")
                         continue
+
             if len(self.phrases) == 0:
                 print("\nThat's all the phrases we have! Thanks for playing!\n")
                 input("Press ENTER to exit...")
@@ -76,7 +78,7 @@ class Game():
         while True:
             if len(guess) == 1 and guess.isalpha():
                 if guess not in guess_list:
-                    guess_list.append(guess)
+                    guess_list.extend((guess, guess.upper()))
                     break
                 else:
                     guess = input(
