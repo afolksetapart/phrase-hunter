@@ -86,9 +86,10 @@ class Game():
         while True:
             play_again = input("Would you like to play again? [y/n]  ")
             if play_again.isalpha():
-                if play_again.lower() == "n":
+                play_again = play_again.lower()
+                if play_again == "n" or play_again == "no":
                     sys.exit()
-                elif play_again.lower() == "y":
+                elif play_again == "y" or play_again == "yes":
                     os.system('clear')
                     self.reset_game()
                     self.new_game()
